@@ -10,13 +10,12 @@ server.listen(3001);
 
 io.on('connection', (socket) => {
 
-  socket.on('send-user', (message) => {
+  socket.on('send-message', (message) => {
     io.sockets.in(message.id_room).emit('message',
       {
         message: message.text,
-        id_exp: message.id_exp,
-        id_dest: message.id_dest,
-        room: message.id_room
+        room: message.id_room,
+        nickname: message.nickname
       });
       // INSERER ICI LE MESSAGE DANS LA BDD
   })
@@ -29,20 +28,20 @@ io.on('connection', (socket) => {
   socket.on("writing", data => {
     io.sockets.in(data.id_room).emit("writing", {
       status: true,
-      id: data.id
+      nickname: data.nickname
     })
   })
 
   socket.on("nowriting", data => {
     io.sockets.in(data.id_room).emit("nowriting", {
       status: false,
-      id: data.id
+      nickname: data.nickname
     })
   })
 })
 
 
-/* GET home page. DO NOT TOUCH*/
+/* GET home page */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
